@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Tray, Menu, dialog } = require('electron')
 
 const path = require('path')
 const isDev = require('electron-is-dev')
@@ -7,7 +7,7 @@ require('@electron/remote/main').initialize()
 
 function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  var win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -21,7 +21,52 @@ function createWindow() {
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, '../build/index.html')}`
   )
+
+  let tray = null;
+  win.on('minimize', function (event) {
+    event.preventDefault();
+    win.setSkipTaskbar(true);
+    tray = createTray();
+  });
+
+  win.on('restore', function (event) {
+    win.show();
+    win.setSkipTaskbar(false);
+    tray.destroy();
+  });
+
+  function createTray() {
+    let appIcon = new Tray(path.join(__dirname, "logo192.png"));
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: 'Show', click: function () {
+          win.show();
+        }
+      },
+      {
+        label: 'Exit', click: function () {
+          app.isQuiting = true;
+          app.quit();
+        }
+      }
+    ]);
+
+    appIcon.on('double-click', function (event) {
+      win.show();
+    });
+    appIcon.setToolTip('Tray Tutorial');
+    appIcon.setContextMenu(contextMenu);
+    return appIcon;
+  }
+
 }
+
+
+
+
+
+
+
 
 app.on('ready', createWindow)
 
