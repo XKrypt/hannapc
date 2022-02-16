@@ -2,6 +2,7 @@ const { app, BrowserWindow, Tray, Menu, dialog } = require('electron')
 
 const path = require('path')
 const isDev = require('electron-is-dev')
+const { StartServer } = require('../express/server')
 
 require('@electron/remote/main').initialize()
 
@@ -58,6 +59,10 @@ function createWindow() {
     appIcon.setContextMenu(contextMenu);
     return appIcon;
   }
+
+  StartServer(() => {
+    console.log("Server started!!");
+  })
 
 }
 
