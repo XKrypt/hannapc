@@ -7,12 +7,8 @@ const child_process = require("child_process");
 const app = express();
 
 
-
+//portass
 const port = 3007;
-
-app.get("/", (req, res) => {
-    res.send("Hello world")
-});
 
 
 app.use(express.json());
@@ -23,15 +19,21 @@ app.options('*', cors());
 
 var apps;
 
+//carrega os caminhos dos apps para executal-los, entre outras informações
 let configContent = fs.readFileSync(__dirname + "/apps.json");
 
 apps = JSON.parse(configContent).apps;
 
 console.log(apps);
 
+//executa um app pelo id
 app.post("/apps/exec/:id", (req,res)=> {
+
+    //executa os apps
     apps.forEach(element => {
+
         if (element.id == req.params.id) {
+
             exec(element.path);
             res.send(`Abrindo ${element.name}`);
         }
@@ -39,6 +41,8 @@ app.post("/apps/exec/:id", (req,res)=> {
     
 })
 
+
+//retorna os apps no aruivo apps.json
 app.get("/apps", (req,res) =>  {
     let appsFilter = [];
 
@@ -54,6 +58,7 @@ app.get("/apps", (req,res) =>  {
 })
 
 
+//inicia os servidor express
  exports.StartServer = (callback) => {
 
     app.listen(port, () => {

@@ -1,15 +1,11 @@
 import logo from './logo.svg';
 
 import './App.css';
+import { Home } from './pages/home';
 
 function App() {
-  function name(params) {
-    
-  }
   return (
-    <div className="App">
-     <button>Iniciar Servidor</button>
-    </div>
+   <Home />
   );
 }
 
