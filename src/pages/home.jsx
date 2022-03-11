@@ -1,35 +1,45 @@
-import { AppConfigs, AppContainer, AppIcon, AppItem, AppName, ButtonConfig } from "../components/apps-components";
-import { ServerConfigsContainer, ServerConfigsLabel, ServerConfigsInput, ServerConfigItem, ServerPortContainer } from "../components/server-components";
-
-
+import { AppConfigs, AppContainer, AppIcon, AppItem, AppName, ButtonConfig } from "../components/styled-components/apps-components";
+import { ServerConfigsContainer, ServerConfigsLabel, ServerConfigsInput, ServerConfigItem, ServerPortContainer } from "../components/styled-components/server-components";
+import {api} from '../axios/api';
+import { useState } from "react";
+import { useEffect } from "react";
+import { AppInfo } from "../components/components-items/app-item";
 
 export function Home() {
+
+    const [apps, setApps] = useState([]);
+
+
+
+    useEffect(()=>{
+        api.get("apps").then((response) => {
+            setApps(response.data);
+        });
+    },[])
+
     return (
         <>
             <AppContainer>
 
                 {
-                    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map((value, key) => {
+                    apps.map((value, key) => {
                         return (
-                            <AppItem>
-                                <AppIcon>
-
-                                </AppIcon>
-                                <AppName>
-                                    Chrome {key}
-                                </AppName>
-                            </AppItem>
+                           <AppInfo data={value} />
                         )
                     })
                 }
 
             </AppContainer>
+            
             <AppConfigs>
                 <ButtonConfig>
                     Adicionar
                 </ButtonConfig>
                 <ButtonConfig>
                     Remover
+                </ButtonConfig>
+                <ButtonConfig>
+                    Escanear
                 </ButtonConfig>
             </AppConfigs>
 
