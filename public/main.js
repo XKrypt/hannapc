@@ -2,7 +2,7 @@ const { app, BrowserWindow, Tray, Menu, dialog } = require('electron')
 
 const path = require('path')
 const isDev = require('electron-is-dev')
-const { StartServer } = require('../express/server')
+const { StartServer } = require('../server/express/server')
 
 require('@electron/remote/main').initialize()
 

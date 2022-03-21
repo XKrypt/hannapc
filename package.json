@@ -13,6 +13,7 @@
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "docxtemplater": "^3.29.0",
+    "dotenv": "^16.0.0",
     "electron": "^17.0.1",
     "electron-is-dev": "^2.0.0",
     "express": "^4.17.2",
@@ -30,6 +31,7 @@
   "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
+    "start-server" : "node test-server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

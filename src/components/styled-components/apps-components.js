@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const AppContainer = styled.div`
     margin: 35px 35px ;
-    border: 1px solid #000 ;
+    border: 1px solid #FFF ;
     padding: 15px ;
     max-height: 250px;
     display: flex;
