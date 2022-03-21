@@ -9,33 +9,37 @@ var database = new Parsim(savePath,false,'utf8');
 
 
 
-exports.scanApps = () => {
-
-    //Caminho para o menu iniciar
-    let startMenuPath = `${process.env.APPDATA}\\Microsoft\\Windows\\Start Menu\\Programs\\`;
-
+exports.scanApps = (scanPath = '') => {
 
     if (database.getGroup('apps') == undefined) {
         database.addGroup('apps')
     }
 
-    fs.readdir(startMenuPath,  (err, files) => {
+    fs.readdir(scanPath,  (err, files) => {
 
         //Procura arquivos lnk que são atalhos e pega sua propriedades
         files.forEach(file => {
+            if (fs.existsSync(scanPath+file)  && fs.lstatSync(scanPath+file).isDirectory()) {
+                this.scanApps(scanPath+file+"\\");
+            }
 
+            
             if(path.extname(file) === '.lnk'){
 
-               
+                try {
+                    const shortcut = shell.readShortcutLink(scanPath+file);
+                    database.addData('apps',{
+                        //name id
+                        nid : file.toLowerCase().replace(' ', '_'),
+                        name : file.replace('.lnk',''),
+                        path : shortcut.target
+                        //target é o caminho do executavel.
+                   })
+                } catch (error) {
+                    console.log(`Error to read : ${scanPath+file}`);
+                }
                 //lê as propriedades do atalho
-                const shortcut = shell.readShortcutLink(startMenuPath+file);
-                database.addData('apps',{
-                    //name id
-                    nid : file.toLowerCase().replace(' ', '_'),
-                    name : file.replace('.lnk',''),
-                    path : shortcut.target
-                    //target é o caminho do executavel.
-               })
+               
             }
         })
     })

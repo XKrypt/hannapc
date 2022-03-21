@@ -24,10 +24,10 @@ app.post("/apps/exec/:id", (req,res)=> {
 
 
 //Scan
-app.get("/apps/scan", (req,res)=> {
-
+app.get("/apps/scan/", (req,res)=> {
+    let scanPath = `${process.env.APPDATA}\\Microsoft\\Windows\\Start Menu\\Programs\\`;
     //executa os apps
-    scanApps();
+    scanApps(req.body.scanPath || scanPath);
     res.sendStatus(200);
     
 })
@@ -41,8 +41,8 @@ app.put("/apps", (req,res) => {
         res.sendStatus(201);
 })
 
-//Adicionar um novo app
-app.remove("/apps", (req,res) => {
+//remove um app
+app.delete("/apps", (req,res) => {
         removeApp(req.body.data.nid);
         res.sendStatus(201);
 })
