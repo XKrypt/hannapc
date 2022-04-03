@@ -1,13 +1,32 @@
 import styled from "styled-components";
 
+export const Aplication = styled.div`
+        display: flex;
+        width: 100%;
+`
+
 export const AppContainer = styled.div`
-    margin: 35px 35px ;
-    border: 1px solid #FFF ;
-    padding: 15px ;
-    max-height: 250px;
+    margin: 15px 25px ;
+    border: 2px solid #3e86b1 ;
+    padding: 5px ;
+    float:left;
+    border-radius: 7px;
+    max-height : 450px;
+    width: 350px;
     display: flex;
     flex-wrap: wrap ;
     overflow: auto ;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: none;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #CCC;
+        border-radius: 5px;
+    }
 `
 
 

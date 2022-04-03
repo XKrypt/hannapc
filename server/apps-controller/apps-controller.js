@@ -2,18 +2,34 @@ const fs = require('fs');
 const path = require('path');
 const child_process = require("child_process");
 const {shell} = require('electron');
-const Parsim = require('../parsim').default
+const {Parsin} = require('parsin')
 
-var savePath =  `${process.env.HOMEPATH}\\Documents\\Hanna\\parsim.json`
-var database = new Parsim(savePath,false,'utf8');
+var savePath =  `${process.env.HOMEPATH}\\Documents\\Hanna\\database.json`
 
+var database = new Parsin(savePath,false,'utf8');
+
+if (database.getGroup('apps') == undefined) {
+    database.addGroup('apps');
+}
+if (database.getGroup('downloads') == undefined) {
+    database.addGroup('downloads');
+}
+
+if (database.getGroup('configs') == undefined) {
+    database.addGroup('configs');
+    database.addData('configs',{
+        config : 'port',
+        port : 3007
+    })
+}
+exports.getConfig = (config) => {
+    return database.getSingleData('configs', (data) => data.data.config == config);
+}
 
 
 exports.scanApps = (scanPath = '') => {
 
-    if (database.getGroup('apps') == undefined) {
-        database.addGroup('apps')
-    }
+   
 
     fs.readdir(scanPath,  (err, files) => {
 
@@ -48,33 +64,23 @@ exports.scanApps = (scanPath = '') => {
 
 exports.addApp = (appName, appTarget) => {
     database.addData('apps',{
-        nid : appName.toLowerCase().replace(' ', '_'),
         name : appName,
         path : appTarget
     })
 }
 
-exports.removeApp = (nid) => {
-    database.removeData('apps', (app,key) => app.nid = nid);
+exports.removeApp = (id) => {
+    database.removeData('apps', (app) => app.id = id);
 }
 
-exports.executeApp = (nid) => {
+exports.executeApp = (id) => {
 
-    let app = database.getData('apps', data => data.nid == nid).path;
+    let app = database.getSingleData('apps', data => data.id == id).data.path;
     exec(app);
 
 }
 
 //remove os caminhos do app e retorna só o nome e um name id (nid).
-exports.getAppsWithoutPath = () => {
-    let appsFiltered = [];
-    
-    database.getGroup('apps').data.forEach(element => {
-        appsFiltered.push({
-            name: element.name,
-            id : element.nid
-        })
-    });
-
-    return appsFiltered;
+exports.getApps = () => {
+    return database.getAllData('apps');
 }

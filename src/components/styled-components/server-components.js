@@ -1,17 +1,22 @@
 import styled from 'styled-components'
 
 export const ServerConfigsContainer = styled.div`
-    display: flex;
+    display: block;
     justify-content: space-evenly ;
     flex-wrap: wrap ;
     padding: 15px ;
+    width: 80%;
 `
 
 export const ServerConfigItem = styled.div`
 
 `
-export const ServerPortContainer = styled.div`
-
+export const ServerConfigsInputs = styled.div`
+        width: 100%;
+        max-width: 600px;
+        padding: 20px 0px;
+        display : flex;
+        justify-content: space-around;
 `
 
 export const ServerConfigsInput = styled.input`

@@ -1,12 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const { getAppsWithoutPath, executeApp, scanApps, addApp, removeApp } = require('../apps-controller/apps-controller');
+const {executeApp, getApps, scanApps, addApp, removeApp,getConfig } = require('../apps-controller/apps-controller');
 
 const app = express();
 
 
-//portass
-const port = 3007;
+//portas
+const port = getConfig('port').data.port;
 
 
 app.use(express.json());
@@ -22,9 +22,8 @@ app.post("/apps/exec/:id", (req,res)=> {
     
 })
 
-
 //Scan
-app.get("/apps/scan/", (req,res)=> {
+app.put("/apps/scan/", (req,res)=> {
     let scanPath = `${process.env.APPDATA}\\Microsoft\\Windows\\Start Menu\\Programs\\`;
     //executa os apps
     scanApps(req.body.scanPath || scanPath);
@@ -42,8 +41,8 @@ app.put("/apps", (req,res) => {
 })
 
 //remove um app
-app.delete("/apps", (req,res) => {
-        removeApp(req.body.data.nid);
+app.delete("/apps/:id", (req,res) => {
+        removeApp(req.params.id);
         res.sendStatus(201);
 })
 
@@ -51,7 +50,7 @@ app.delete("/apps", (req,res) => {
 //Retorna os apps no aruivo apps.json
 app.get("/apps", (req,res) =>  {
     
-    res.json(getAppsWithoutPath());
+    res.json(getApps());
     
 })
 
